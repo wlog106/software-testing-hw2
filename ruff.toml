@@ -1,0 +1,6 @@
+# Static analysis config used by CI (Part 3).
+# E/W = pycodestyle, F = pyflakes, B = bugbear (likely bugs)
+line-length = 120
+
+[lint]
+select = ["E", "F", "W", "B"]
