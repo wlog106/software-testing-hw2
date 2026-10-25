@@ -4,14 +4,21 @@ on:
   push:
   pull_request:
 
+# Each homework part lives in its own folder with its own Calc.py / CalcTest.py.
+# To add a part (e.g. part7), append its folder to both `part` lists below.
+
 jobs:
   test:
-    name: Unit tests (Python ${{ matrix.python-version }})
+    name: Unit tests ${{ matrix.part }} (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        part: [part1, part6]
         python-version: ["3.10", "3.11", "3.12", "3.13"]
+    defaults:
+      run:
+        working-directory: ${{ matrix.part }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -20,8 +27,8 @@ jobs:
       - name: Run unittest
         run: python -m unittest -v CalcTest
 
-  quality:
-    name: Static analysis + coverage
+  lint:
+    name: Static analysis (ruff)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,19 +37,38 @@ jobs:
           python-version: "3.13"
       - name: Install tools
         run: pip install -r requirements-dev.txt
-      - name: Static analysis (ruff)
+      - name: ruff
         run: ruff check --output-format=github .
+
+  coverage:
+    name: Coverage ${{ matrix.part }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        part: [part1, part6]
+    defaults:
+      run:
+        working-directory: ${{ matrix.part }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install tools
+        run: pip install -r ../requirements-dev.txt
       - name: Tests under coverage
         run: coverage run --branch --source=Calc -m unittest -v CalcTest
       - name: Coverage report (fail below 100%)
         run: |
-          coverage report -m --fail-under=100
+          echo "### Coverage: ${{ matrix.part }}" >> "$GITHUB_STEP_SUMMARY"
           coverage report -m --format=markdown >> "$GITHUB_STEP_SUMMARY"
+          coverage report -m --fail-under=100
       - name: HTML coverage report
         if: always()
         run: coverage html
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: coverage-html
-          path: htmlcov/
+          name: coverage-html-${{ matrix.part }}
+          path: ${{ matrix.part }}/htmlcov/
