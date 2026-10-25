@@ -1,0 +1,88 @@
+import unittest
+from Calc import Calculator
+
+class TestCalculator(unittest.TestCase):
+    def test_add(self):
+        calc = Calculator()
+        for x, y, expected in [
+            (2, 3, 5),
+            (79, -1, 78)
+        ]:
+            with self.subTest(x=x, y=y):
+                result = calc.add(x, y)
+                self.assertIsInstance(result, int, "int + int = int")
+                self.assertEqual(result, expected)
+
+        for x, y, expected in [
+            (1.0, 2, 3.0),
+            (7, -6.0, 1.0),
+            (1.5, 2.4, 3.9),
+            (4.0, 2.0, 6.0),
+            (4.7, -4.8, -0.1)
+        ]:
+            with self.subTest(x=x, y=y):
+                result = calc.add(x, y)
+                self.assertIsInstance(result, float, "if any of the operand is float, result = float")
+                self.assertAlmostEqual(result, expected)
+
+    def test_subtract(self):
+        calc = Calculator()
+        for x, y, expected in [
+            (3, 2, 1),
+            (1000, 567, 433),
+            (13, -8, 21)
+        ]:
+            with self.subTest(x=x, y=y):
+                result = calc.subtract(x, y)
+                self.assertIsInstance(result, int, "int - int = int")
+                self.assertEqual(result, expected)
+
+        for x, y, expected in [
+            (3.0, 2, 1.0),
+            (-1, -0.7, -0.3),
+            (3.9, 1.5, 2.4),
+            (2.0999, -0.0001, 2.1)
+        ]:
+            with self.subTest(x=x, y=y):
+                result = calc.subtract(x, y)
+                self.assertIsInstance(result, float, "if any of the operand is float, result = float")
+                self.assertAlmostEqual(result, expected)
+
+    def test_multiply(self):
+        calc = Calculator()
+        for x, y, expected in [
+            (3, 2, 6),
+            (1000, 567, 567000),
+            (-1, -1, 1)
+        ]:
+            with self.subTest(x=x, y=y):
+                result = calc.multiply(x, y)
+                self.assertIsInstance(result, int, "int * int = int")
+                self.assertEqual(result, expected)
+
+        for x, y, expected in [
+            (3.0, 2, 6.0),
+            (2, -4.0, -8.0),
+            (3.9, 1.5, 5.85),
+            (2.0999, -0.1, -0.20999)
+        ]:
+            with self.subTest(x=x, y=y):
+                result = calc.multiply(x, y)
+                self.assertIsInstance(result, float, "if any of the operand is float, result = float")
+                self.assertAlmostEqual(result, expected)
+
+    def test_divide(self):
+        calc = Calculator()
+        for x, y, expected in [
+            (9, 3, 3.0),
+            (3.0, -2, -1.5),
+            (3.9, 1.5, 2.6),
+            (-2.0999, -0.1, 20.999),
+        ]:
+            with self.subTest(x=x, y=y):
+                result = calc.divide(x, y)
+                self.assertIsInstance(result, float, "division should always return float")
+                self.assertAlmostEqual(result, expected)
+
+if __name__ == "__main__":
+    unittest.main()
