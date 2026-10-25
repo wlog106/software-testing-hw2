@@ -16,4 +16,6 @@ class Calculator:
     def modulo(self, a, b):
         if not isinstance(a, int) or not isinstance(b, int):
             raise TypeError("modulo only accepts integer operands")
+        if b == 0:
+            raise ValueError("Cannot modulo by zero")
         return a % b
