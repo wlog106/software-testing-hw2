@@ -5,7 +5,8 @@ on:
   pull_request:
 
 # Each homework part lives in its own folder with its own Calc.py / CalcTest.py.
-# To add a part (e.g. part7), append its folder to both `part` lists below.
+# To add a part, append its folder to both `part` lists below.
+# Every *Test.py file in a part's folder is run.
 
 jobs:
   test:
@@ -25,7 +26,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Run unittest
-        run: python -m unittest -v CalcTest
+        run: python -m unittest discover -v -p "*Test.py"
 
   lint:
     name: Static analysis (ruff)
@@ -46,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [part1, part6]
+        part: [part1, part6, part7]
     defaults:
       run:
         working-directory: ${{ matrix.part }}
@@ -58,7 +59,7 @@ jobs:
       - name: Install tools
         run: pip install -r ../requirements-dev.txt
       - name: Tests under coverage
-        run: coverage run --branch --source=Calc -m unittest -v CalcTest
+        run: coverage run --branch --source=Calc -m unittest discover -v -p "*Test.py"
       - name: Coverage report (fail below 100%)
         run: |
           echo "### Coverage: ${{ matrix.part }}" >> "$GITHUB_STEP_SUMMARY"
