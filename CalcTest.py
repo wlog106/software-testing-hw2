@@ -91,5 +91,29 @@ class TestCalculator(unittest.TestCase):
             with self.subTest(x=x, y=y), self.assertRaisesRegex(ValueError, "Cannot divide by zero"):
                     calc.divide(x, y)
 
+        def test_modulo(self):
+            calc = Calculator()
+            # Decision: Python-style modulo, the result takes the sign of the divisor
+            for x, y, expected in [
+                (7, 3, 1),
+                (6, 3, 0),
+                (-7, 3, 2),
+                (7, -3, -2),
+                (-7, -3, -1),
+            ]:
+                with self.subTest(x=x, y=y):
+                    result = calc.modulo(x, y)
+                    self.assertIsInstance(result, int, "int % int = int")
+                    self.assertEqual(result, expected)
+
+            # Decision: modulo only accepts integers; any non-int operand raises TypeError
+            for x, y in [
+                (7.5, 2),
+                (7, 2.0),
+                (-7.5, -2.5),
+            ]:
+                with self.subTest(x=x, y=y), self.assertRaisesRegex(TypeError, "integer"):
+                    calc.modulo(x, y)
+
 if __name__ == "__main__":
     unittest.main()
