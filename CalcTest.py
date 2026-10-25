@@ -122,5 +122,36 @@ class TestCalculator(unittest.TestCase):
             with self.subTest(x=x), self.assertRaisesRegex(ValueError, "Cannot modulo by zero"):
                 calc.modulo(x, 0)
 
+    def test_power(self):
+        calc = Calculator()
+        # Decision: int ** non-negative int = int, and power(0, 0) = 1
+        for x, y, expected in [
+            (2, 3, 8),
+            (-2, 3, -8),
+            (-2, 2, 4),
+            (5, 0, 1),
+            (0, 0, 1),
+        ]:
+            with self.subTest(x=x, y=y):
+                result = calc.power(x, y)
+                self.assertIsInstance(result, int, "int ** non-negative int = int")
+                self.assertEqual(result, expected)
+
+        # Decision: a negative exponent returns a float
+        for x, y, expected in [
+            (2, -1, 0.5),
+            (4, -2, 0.0625),
+            (-2, -1, -0.5),
+        ]:
+            with self.subTest(x=x, y=y):
+                result = calc.power(x, y)
+                self.assertIsInstance(result, float, "negative exponent returns float")
+                self.assertAlmostEqual(result, expected)
+
+        # Decision: power(0, negative) raises ZeroDivisionError
+        for y in [-1, -2]:
+            with self.subTest(x=0, y=y), self.assertRaisesRegex(ValueError, "Cannot modulo by zero"):
+                calc.power(0, y)
+
 if __name__ == "__main__":
     unittest.main()
