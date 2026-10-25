@@ -84,5 +84,12 @@ class TestCalculator(unittest.TestCase):
                 self.assertIsInstance(result, float, "division should always return float")
                 self.assertAlmostEqual(result, expected)
 
+        for x, y in [
+            (5, 0),
+            (4, 0.0)
+        ]:
+            with self.subTest(x=x, y=y), self.assertRaisesRegex(ValueError, "Cannot divide by zero"):
+                    calc.divide(x, y)
+
 if __name__ == "__main__":
     unittest.main()
