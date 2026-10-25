@@ -3,6 +3,7 @@
 | Folder | Contents |
 |---|---|
 | `part1/` | Q1: Calc (add, subtract, multiply, divide) developed with TDD by hand, no AI |
+| `part3/` | Q3: copy of Part 1 used to demonstrate the coverage gate (test cases removed → coverage job fails → restored) |
 | `part6/` | Q6: Calc extended with `modulo` and `power` via agentic TDD (Claude) |
 | `part7/` | Q7: Calc written by a fresh agent from the Q1 tests only, plus property-based/metamorphic tests (`PropertyTest.py`) |
 | `.github/workflows/ci.yml` | Q2/Q3: CI running unittest, ruff and a 100% branch-coverage gate for every part |
@@ -10,7 +11,7 @@
 Run the tests for one part:
 
 ```bash
-cd part1   # or part6, part7
+cd part1   # or part3, part6, part7
 python -m unittest discover -v -p "*Test.py"
 ```
 
