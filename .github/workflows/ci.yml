@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [part1, part6, part7]
+        part: [part1, part3, part6, part7]
         python-version: ["3.10", "3.11", "3.12", "3.13"]
     defaults:
       run:
@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        part: [part1, part6, part7]
+        part: [part1, part3, part6, part7]
     defaults:
       run:
         working-directory: ${{ matrix.part }}
