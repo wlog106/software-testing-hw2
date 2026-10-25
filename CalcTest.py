@@ -148,10 +148,40 @@ class TestCalculator(unittest.TestCase):
                 self.assertIsInstance(result, float, "negative exponent returns float")
                 self.assertAlmostEqual(result, expected)
 
-        # Decision: power(0, negative) raises ZeroDivisionError
-        for y in [-1, -2]:
-            with self.subTest(x=0, y=y), self.assertRaisesRegex(ValueError, "Cannot modulo by zero"):
-                calc.power(0, y)
+        # Decision: floats are allowed (float ** float, float ** int, int ** float)
+        # as long as the result is real; the result is a float
+        for x, y, expected in [
+            (2.5, 2, 6.25),
+            (-1.5, 2, 2.25),
+            (4, 0.5, 2.0),
+            (2.0, 3.0, 8.0),
+            (-2, 2.0, 4.0),
+            (8.0, -1 / 3, 0.5),
+        ]:
+            with self.subTest(x=x, y=y):
+                result = calc.power(x, y)
+                self.assertIsInstance(result, float, "float operand returns float")
+                self.assertAlmostEqual(result, expected)
+
+        # Decision: zero to a negative power raises ValueError, like divide
+        for x, y in [
+            (0, -1),
+            (0, -2),
+            (0.0, -1),
+        ]:
+            with self.subTest(x=x, y=y), self.assertRaisesRegex(ValueError, "Cannot divide by zero"):
+                calc.power(x, y)
+
+        # Decision: a negative base with a fractional exponent would give a complex
+        # number, so it raises ValueError
+        for x, y in [
+            (-8, 0.5),
+            (-8, -0.5),
+            (-2.5, 0.5),
+            (-8, 1.5),
+        ]:
+            with self.subTest(x=x, y=y), self.assertRaisesRegex(ValueError, "complex"):
+                calc.power(x, y)
 
 if __name__ == "__main__":
     unittest.main()
