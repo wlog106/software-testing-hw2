@@ -115,5 +115,12 @@ class TestCalculator(unittest.TestCase):
             with self.subTest(x=x, y=y), self.assertRaisesRegex(TypeError, "integer"):
                 calc.modulo(x, y)
 
+    def test_modulo_by_zero(self):
+        calc = Calculator()
+        # Decision: modulo by zero raises ValueError, consistent with divide
+        for x in [5, 0, -5]:
+            with self.subTest(x=x), self.assertRaisesRegex(ValueError, "Cannot modulo by zero"):
+                calc.modulo(x, 0)
+
 if __name__ == "__main__":
     unittest.main()
